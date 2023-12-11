@@ -1,0 +1,31 @@
+<template>
+    <header class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <template if:true={showIcon}>
+                        <div class="slds-media__figure">
+                            <!-- <lightning-icon icon-name={iconName} size="small"></lightning-icon> -->
+                            <!-- <lightning-icon > -->
+
+                                <div class="slds-icon-eq slds-is-animated" title="Description of the icon">
+                                    <div class="slds-icon-eq__bar"></div>
+                                    <div class="slds-icon-eq__bar"></div>
+                                    <div class="slds-icon-eq__bar"></div>
+                                    <div></div>
+                                    <span class="slds-assistive-text">icon animee</span>
+                                </div>
+                            <!-- </lightning-icon> -->
+                        </div>
+                    </template>
+                    <div class="slds-media__body">
+                        <h1 class="slds-card__header-title">
+                            <!-- <a href="#" class="slds-card__header-link slds-truncate" title="realloc"></a> -->
+                            <span class=""> </span>{title}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</template>

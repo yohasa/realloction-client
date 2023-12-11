@@ -1,0 +1,38 @@
+<template>
+            <c-header-card title="Reallocations de Clients"></c-header-card>
+
+    <lightning-tabset variant="scoped">
+
+        <lightning-tab label="SINGLE REALOC - (Multi to One Owner)">
+
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <c-autocomplete-combobox></c-autocomplete-combobox>
+                  <span>1</span>
+                </div>
+                <div class="slds-col">
+                  <span>2</span>
+                  <c-demo></c-demo>
+                </div>
+                <div class="slds-col">
+            <!-- <c-header-card title="Reallocations de Clients"></c-header-card> -->
+
+                  <span>3</span>
+                </div>
+                <div class="slds-col">
+                  <span>4</span>
+                  <!-- <c-header-card title="Reallocations de Clients"></c-header-card> -->
+
+                </div>
+              </div>
+
+            <c-demo></c-demo>
+        </lightning-tab>
+
+
+        <lightning-tab label="MASS REALOC - (Many to Many Owner)">
+           <c-mutli-select-picklist></c-mutli-select-picklist>
+        </lightning-tab>
+        
+    </lightning-tabset>
+</template>
