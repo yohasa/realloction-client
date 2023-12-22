@@ -2,7 +2,10 @@
     <lightning-card values={valuees}>
 
     <!-- picklistlabel sets the label to multi select combobox -->
-    <c-mutli-select-picklist picklistlabel="Country" values={values}>
+    <c-mutli-select-picklist picklistlabel="Country" 
+                             values={options1} 
+                             selectedvalues={value1}
+                             onchange={handleCombobox1Change}>
 
     </c-mutli-select-picklist>
      
@@ -12,11 +15,15 @@
                             variant="bare">
 
     </lightning-button-icon> -->
-<template if:true={fetchSelectedValues}>
-    <c-mutli-select-picklist picklistlabel="Stors" values={valSt}>
+<!-- <template if:true={fetchSelectedValues}> -->
+    <c-mutli-select-picklist picklistlabel="Stors" 
+                             values={options2} 
+                             selectedvalues={value2}
+                             disabled={isCombobox2Disabled}
+                              onchange={handleCombobox2Change}>
     </c-mutli-select-picklist>
 
-</template>
+<!-- </template> -->
 
 
     <p>The selected value is : {valuees}</p>

@@ -1,0 +1,16 @@
+<template>
+    <lightning-dual-listbox
+        name={name}
+        label={label}
+        source-label="Available Options"
+        selected-label="Selected Options"
+        options={options}
+        value={value}
+        onchange={handleChange}
+        show-search
+        search-placeholder="Search Options"
+        show-input-section
+        required-options={minSelections}
+        max-options={maxSelections}
+    ></lightning-dual-listbox>
+</template>

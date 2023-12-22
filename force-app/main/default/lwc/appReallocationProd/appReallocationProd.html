@@ -1,0 +1,270 @@
+<template>
+  
+    <c-header-card title="Reallocations de Clients" show-icon></c-header-card>
+    <lightning-card>
+  
+      <lightning-tabset variant="appRealloction">
+        
+        <lightning-tab label="SINGLE REALOC - (Multi to One Owner)">
+          <!-- <lightning-accordion active-section-name="lc"> -->
+          <!-- <lightning-accordion > -->
+      
+            <!-- <lightning-accordion-section name="selectms" label="Select Main SA"> -->
+            <lightning-card>
+              <c-generic-header header-title="> Select" is-heading1 show-icon icon-name="standard:account"></c-generic-header>
+  
+              
+              <div class="slds-p-horizontal_medium slds-grid slds-gutters">
+                <div class="slds-col">
+                  <!-- <span> -->
+                    <c-dual-listbox-generic
+                    name="combobox1" 
+                    label="Country" 
+                    value={value1} 
+                    options={options1}
+                    onchange={handleCombobox1Change}>
+                  </c-dual-listbox-generic>
+  
+                       
+                
+                      <!-- <c-autocomplete-combobox></c-autocomplete-combobox> -->
+                      <!-- <c-mutli-select-picklist picklistlabel="Country" values={values}> -->
+                        <!-- </span> -->
+                      </div>
+                  <div class="slds-col">
+                    <!-- <c-combobox-generic 
+                        name="combobox2" 
+                        label="Stors" 
+                        value={value2} 
+                        options={options2}
+                        disabled={isCombobox2Disabled}
+                        onchange={handleCombobox2Change}>
+                      </c-combobox-generic> -->
+                      
+                      <c-dual-listbox-generic
+                      name="combobox2" 
+                      label="Stors" 
+                      value={value2} 
+                      options={options2}
+                      disabled={isCombobox2Disabled}
+                      onchange={handleCombobox2Change}>
+                    </c-dual-listbox-generic>
+                      <!-- <c-multi-select-combobox
+                      label="Stors" 
+                      value={value2}
+                      options={options2}
+                      disabled={isCombobox2Disabled}
+                      onchange={handleCombobox2Change}
+      ></c-multi-select-combobox>
+                       -->
+                      <!-- <span>2</span> -->
+                    </div>
+                    <div class="slds-col">
+                      <!-- <c-combobox-generic 
+                      name="combobox3" 
+                      label="Owners" 
+                      value={value3} 
+                      options={options3}
+                      disabled={isCombobox3Disabled}
+                      onchange={handleCombobox3Change}>
+                    </c-combobox-generic> -->
+                    <c-dual-listbox-generic
+                    name="combobox3" 
+                    label="Owners" 
+                    value={value3} 
+                    options={options3}
+                    disabled={isCombobox3Disabled}
+                    onchange={handleCombobox3Change}>
+                  </c-dual-listbox-generic>
+                  
+                  </div>
+                  <div class="slds-col">
+                    <!-- <span> -->
+                      <!-- <c-mutli-select-picklist picklistlabel="Country" values={option1}>
+                      </c-mutli-select-picklist> -->
+                      <div></div>
+                      <lightning-button variant="base" label="Bring the customers"
+                      onclick={handleClickBnt} disabled = {isBtn}
+                      title="Bring the customers" icon-name="utility:download" class="slds-m-left_x-small">
+                      
+                    </lightning-button>
+                    
+                    <!-- <c-button-with-icon icon="">  </c-button-with-icon>" -->
+                    <!-- </span> -->
+                  </div>
+                </div>
+              </lightning-card>
+              <!-- </lightning-accordion-section> -->
+            <lightning-card>
+              
+            <!-- <lightning-accordion-section name="lc" label="Result"> -->
+              <div>
+                <c-generic-header header-title="> Result" is-heading3  icon-name="standard:account"></c-generic-header>
+        
+            </div>
+              <div class="slds-p-horizontal_small slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12">
+                 <!-- parentComponent.html -->
+                <!-- <lightning-button label="Ouvrir la boîte de dialogue" onclick={openDialog}></lightning-button> -->
+                <c-confirm-dialog
+                    if:true={showDialog}
+                    message=  {mymessage}
+                    oncancel={handleCancel}
+                    onconfirm={handleConfirm}>
+                </c-confirm-dialog>
+  
+                  <lightning-card if:true={showTable}>
+                  <!-- <lightning-button-icon icon-name='action:reset_password' 
+                         alternative-text="reset selection" 
+                         onclick={resetSelection}
+                         disabled ={isBtnSel}
+                         variant="bare">
+                   </lightning-button-icon> -->
+                  <!-- <lightning-button-icon icon-name='utility:orders' 
+                         alternative-text="all selection" 
+                         onclick={allSelection}
+                         disabled ={isBtnAll}
+                         variant="bare">
+                   </lightning-button-icon> -->
+  
+                   <div class="slds-align_absolute-center slds-m-around_medium">
+                    <c-datatable-search all-data={datag} onfiltered={handleResults}></c-datatable-search>
+                </div>
+                <lightning-datatable
+                    key-field="Id" 
+                    data={filteredData} 
+                    columns={columnsg}
+
+
+                    load-more-offset={loadMoreOffset}
+                   onscroll={handleScroll}
+
+                   
+                   onrowselection={handleRowSelection}
+                    >
+                </lightning-datatable>
+  <!--               
+                   <lightning-datatable
+                   data={datag}
+                   columns={columnsg}
+                   key-field="Id"
+                   load-more-offset={loadMoreOffset}
+                   onscroll={handleScroll}
+                   onrowselection={handleRowSelection}
+                   class="hide-actions">
+               </lightning-datatable>
+                         -->
+                      </lightning-card>
+                      
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12">
+                      <!-- selected-rows={selectedRows} -->
+                      <!-- hide-checkbox-column -->
+                  <!-- onrowaction={handleRowSelection} -->
+                  <!-- <span> -->
+            <!-- <lightning-card> -->
+  
+              
+              <c-generic-header header-title="New Owner" is-heading3  icon-name="standard:account"></c-generic-header>
+              <!-- <c-combobox
+              name="combobox4" 
+              label="Country" 
+              value={value4} 
+              options={options4}
+              onchange={handleCombobox4Change}>
+              </c-combobox> -->
+              <c-combobox-generic 
+              name="combobox4" 
+              label="Country" 
+              value={value4} 
+              options={options1}
+              onchange={handleCombobox4Change}>
+            </c-combobox-generic>
+            <!-- options={options4} -->
+            <!-- <c-mutli-select-picklist picklistlabel="Stors" 
+                                     values={options5}
+                                     disabled={isCombobox5Disabled}
+                                     onchange={handleCombobox5Change}
+                                     ></c-mutli-select-picklist> -->
+                <c-combobox-generic 
+                name="combobox5" 
+                label="Stors" 
+                value={value5} 
+                options={options5}
+                disabled={isCombobox5Disabled}
+                onchange={handleCombobox5Change}>
+              </c-combobox-generic>
+              <div class="slds-p-horizontal_small slds-container">
+                <template for:each={options6} for:item="rec">
+                  <div key={rec.id} class="slds-row slds-size_4-of-12">
+                    <lightning-card title = {rec.seller}>
+                      <h1 class="slds-p-vertical_line">{rec.sellerName}</h1>
+                      <p >De la {rec.storeName}</p>
+                      <lightning-input
+                            type="radio"
+                            name="owner"
+                            value={rec.id}
+                            label="Sélectionner"
+                            data-seller-name={rec.sellerName}
+                            data-store-name={rec.storeName}
+                            data-store-id={rec.storeId}
+                            onchange={handleOwnerSelection}>
+                        </lightning-input>
+  
+                    </lightning-card>
+                  </div>
+                </template>
+              </div>
+              
+              <!-- </lightning-card> -->
+              <!-- </span> -->
+              <button type="submit" 
+              onclick={handleClickBntRealoc} disabled={isBtnRealoc}
+              >Reallocations</button>
+            </div>
+          </div>
+          <!-- onclick={handleClickBntRealoc} disabled = {isBtnRealoc} -->
+          <!-- </lightning-accordion-section>   -->
+        </lightning-card>
+        
+        <!-- <div class="popup" onclick={handleMouseOver}>Click me!
+          <span class="popuptext" id="myPopup">
+            <c-libs-chartjs  labs ={labs} valeurs={valeurs}></c-libs-chartjs>
+            
+            Popup text...
+          </span>
+        </div> -->
+  
+            <!-- <lightning-button-icon
+  icon-name='utility:info_alt'
+  alternative-text="chart"
+  
+  variant="bare">
+  <div class="popup" data-popup>
+  Insérez ici votre graphique des comptes
+  <c-libs-chartjs ids={rec.id} labs ={labs} valeurs={valeurs}></c-libs-chartjs>
+  </lightning-button-icon> -->
+  
+  <!-- onmouseenter={handleMouseOver} -->
+  
+  
+        <!-- </div> -->
+          <!-- </lightning-accordion> -->
+  
+  
+              
+              
+              
+          </lightning-tab>
+          
+          <lightning-tab label="MASS REALOC - (Many to Many Owner)">
+            <!-- <c-mutli-select-picklist></c-mutli-select-picklist> -->
+          </lightning-tab>
+  
+          <lightning-tab label="About">
+            <c-misc-static-resource></c-misc-static-resource>
+          </lightning-tab>
+  
+    </lightning-tabset>
+  </lightning-card>
+  </template>

@@ -1,9 +1,18 @@
 <template>
-    <lightning-combobox 
-        name={name} 
-        label={label} 
-        value={value} 
-        options={options} 
-        onchange={handleChange}>
-    </lightning-combobox>
+    <lightning-combobox
+        name={name}
+        label={label}
+        value={placeholderValue}
+        options={filteredOptions}
+        onchange={handleChange}
+        variant="label-hidden"
+        class="multi-select-combobox"
+        dropdown-alignment="auto"
+        type="text"
+        placeholder="Search or Select"
+        oninput={handleSearch}
+    ></lightning-combobox>
+    <!-- <div class="select-all" onclick={toggleSelectAll}>
+        Select All
+    </div> -->
 </template>

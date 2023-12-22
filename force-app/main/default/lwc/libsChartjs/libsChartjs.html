@@ -1,11 +1,21 @@
 <template>
-    <lightning-card title="LibsChartjs" icon-name="custom:custom19">
+    <!-- <lightning-card title="LibsChartjs" icon-name="custom:custom19"> -->
         <div class="chart slds-var-m-around_medium" lwc:dom="manual"></div>
-        <div>
-        <canvas lwc:dom="manual" id="monGraphique" width="400" height="200"></canvas>
-        </div>
-    <c-view-source source="lwc/libsChartjs" slot="footer">
+        <template lwc:if={error}>ereur{error}
+       
+        </template>
+      
+    <!-- </lightning-card> -->
+
+
+    <!-- <lightning-card title="LibsChartjs" icon-name="custom:custom19"> -->
+        <!-- <div class="chart slds-var-m-around_medium" lwc:dom="manual"></div> -->
+        <!-- <div> -->
+            <!-- <canvas lwc:dom="manual" id="monGraphique" width="100" height="50"></canvas> -->
+            <!-- <div><h1>{totalvaleurs}</h1></div> -->
+        <!-- </div> -->
+    <!-- <c-view-source source="lwc/libsChartjs" slot="footer">
         Use Chart.js in a Lightning Web component.
-    </c-view-source>
-</lightning-card>
+    </c-view-source> -->
+<!-- </lightning-card> -->
 </template>

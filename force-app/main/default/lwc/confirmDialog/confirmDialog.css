@@ -1,0 +1,40 @@
+/* confirmDialog.css */
+.slds-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9000;
+}
+
+.slds-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+}
+
+.slds-modal__container {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    background: #fff;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    width: 20rem;
+}
+
+.slds-modal__header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #d8dde6;
+}
+
+.slds-modal__content {
+    padding: 1rem;
+}
+
+.slds-modal__footer {
+    padding: 1rem;
+    text-align: right;
+}

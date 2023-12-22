@@ -2,4 +2,10 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Private</cacheControl>
     <contentType>text/javascript</contentType>
+    <!-- <contentType>application/zip</contentType> -->
+    <!-- <types>
+        <members>chartDatalabels</members>
+        <members>chartJs</members>
+        <name>StaticResource</name>
+    </types> -->
 </StaticResource>

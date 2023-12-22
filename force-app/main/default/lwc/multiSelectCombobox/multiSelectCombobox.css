@@ -1,0 +1,51 @@
+/* multi-select-combobox.css */
+:host {
+    display: inline-block;
+    position: relative;
+}
+.search-container {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    /* margin-bottom: 8px; */
+}
+.dropdown {
+    position: absolute;
+    top: 100%;
+    /* top: 40px; Ajustez cela en fonction de vos besoins */
+    left: 0;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+}
+.selected {
+    float: right;
+    margin-right: 5px;
+    color: #4caf50;
+}
+
+.unselected {
+    float: right;
+    margin-right: 5px;
+    color: #ccc;
+}
+
+.dropdown ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown li:hover {
+    background-color: #f4f4f4;
+}

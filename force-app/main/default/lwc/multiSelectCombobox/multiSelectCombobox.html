@@ -1,0 +1,30 @@
+<!-- multi-select-combobox.html -->
+<template>
+    <lightning-input
+        type="text"
+        label={label}
+        value={selectedValuesString}
+        placeholder={placeholderText}
+        onchange={handleInputChange}
+        readonly
+        onclick={toggleDropdown}
+    ></lightning-input>
+    <template if:true={isDropdownOpen}>
+        <div class="dropdown">
+            <div class="search-container">
+                <input type="text" placeholder="Search" value={searchTerm} oninput={handleSearchInputChange} />
+            </div>
+            <ul>
+                <template for:each={filteredOptions} for:item="option">
+                    <c-picklist-value
+                        key={option.value}
+                        label={option.label}
+                        value={option.value}
+                        selected={option.selected}
+                        onclick={handleOptionClick}
+                    ></c-picklist-value>
+                </template>
+            </ul>
+        </div>
+    </template>
+</template>
