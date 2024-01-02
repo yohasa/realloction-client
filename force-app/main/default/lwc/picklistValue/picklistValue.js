@@ -1,10 +1,11 @@
-import { LightningElement, track, api } from 'lwc';
+/* eslint-disable @lwc/lwc/no-api-reassignments */
+import { LightningElement, api } from 'lwc';
 
 export default class App extends LightningElement {
     
     @api
-    selected;
-    // selected = false;
+    selected = false;
+    // @track selected;
     
     @api
     label;
@@ -12,17 +13,23 @@ export default class App extends LightningElement {
     @api
     value;
 
-    handleSelect() {
-        this.selected = !this.selected;
+    // handleSelect() {
+    //     // this.selected = true;
+    //     if(this.selected){
+    //                 this.selected = false;
+    //             }else{
+    //                 this.selected = true;
+    //             } 
+        // this.selected = !this.selected;
 
-        const selectEvent = new CustomEvent('select', {
-            detail: {
-                value: this.value,
-                selected: this.selected
-            }
-        });
-        this.dispatchEvent(selectEvent);
-    }
+        // const selectEvent = new CustomEvent('select', {
+        //     detail: {
+        //         value: this.value,
+        //         selected: this.selected
+        //     }
+        // });
+        // this.dispatchEvent(selectEvent);
+    // }
 
     // handleSelect(event) {
     //     //this.selected = true;

@@ -1,0 +1,35 @@
+
+.custom-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-content {
+  position: absolute;
+  top: 0;
+  right: 100%; /* Positionnement à gauche de l'icône */
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 5px; /* Ajout de coins arrondis */
+  padding: 10px;
+  display: none;
+  opacity: 1; /* Opacité complète, donc non transparent */
+  z-index: 999; /* Valeur de z-index élevée pour être au-dessus des autres éléments */
+}
+
+
+.custom-tooltip:hover .tooltip-content {
+  display: block;
+}
+
+.exampleHolder{
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  display: inline-block;
+  opacity: 0.4; /* Opacité complète, donc non transparent */
+  z-index: 999; /* Valeur de z-index élevée pour être au-dessus des autres éléments */
+  width: 80px;
+  height: 80px;
+}
+

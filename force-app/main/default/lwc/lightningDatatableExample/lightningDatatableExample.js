@@ -36,14 +36,14 @@ export default class LightningDatatableExample extends LightningElement {
     @track value;
     @track error;
     @track data;
-    @api sortedDirection = 'asc';
-    @api sortedBy = 'Name';
-    @api searchKey = '';
+    @track sortedDirection = 'asc';
+    @track sortedBy = 'Name';
+    @track searchKey = '';
     result;
     @track allSelectedRows = [];
     @track page = 1; 
     @track items = []; 
-    @track data = []; 
+    // @track data = []; 
     @track columns; 
     @track startingRecord = 1;
     @track endingRecord = 0; 
@@ -52,7 +52,7 @@ export default class LightningDatatableExample extends LightningElement {
     @track totalPage = 0;
     isPageChanged = false;
     initialLoad = true;
-    mapoppNameVsOpp = new Map();;
+    mapoppNameVsOpp = new Map();
   
     @wire(getOpps, {searchKey: '$searchKey', sortBy: '$sortedBy', sortDirection: '$sortedDirection'})
     wiredAccounts({ error, data }) {
@@ -69,7 +69,6 @@ export default class LightningDatatableExample extends LightningElement {
         this.items = data;
             this.totalRecountCount = data.length; 
             this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize); 
-            
             this.data = this.items.slice(0,this.pageSize); 
             this.endingRecord = this.pageSize;
             this.columns = columns;

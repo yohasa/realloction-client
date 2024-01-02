@@ -1,5 +1,6 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import getCountries from '@salesforce/apex/AppRealloc.GetCountries';
+import getCountryStores from '@salesforce/apex/AppRealloc.GetCountryStores';
 import getStores from '@salesforce/apex/AppRealloc.GetStores';
 import getOwners from '@salesforce/apex/AppRealloc.GetOwners';
 import getOwnersCard from '@salesforce/apex/AppRealloc.GetOwnersCard';
@@ -9,7 +10,7 @@ import getAccounts2 from '@salesforce/apex/AppRealloc.GetAccounts2';
 import getReallocation2 from '@salesforce/apex/AppRealloc.Realloction2';
 // import STR_ID_FIELD from '@salesforce/schema/Store__c.Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-// import { refreshApex } from '@salesforce/apex';
+import { refreshApex } from '@salesforce/apex';
 import { NavigationMixin } from 'lightning/navigation';
 import chartjs from '@salesforce/resourceUrl/chartJs';
 import { loadScript } from 'lightning/platformResourceLoader';
@@ -26,13 +27,39 @@ const columns = [
 ];
 
 export default class AppRealloction extends NavigationMixin (LightningElement) {
-   
+    @wire(getCountries) countries;
+    get countryData() {
+        if (this.countries.data) {
+            return  this.countries.data.map(country => ({
+                value: country.Id,
+                label: country.Name,
+            }));
+        }
+        return [];
+    }
+    // id: country.Id,
+    // value: country.Name,
+
     @track res1 = null;
     @track valeurs;
     @track dis1;
     @track labs;
-    @track
-    value1="";
+    @track inver = true;
+    // @track selectedValues = [];
+    // get selectedValuesString() {
+    //     return this.selectedValues.join(', ');
+    // }
+
+    handleSelectedValues(event) {
+        console.log('handleSelected :');
+        console.log('handleSelected :', event.detail);
+        console.log('handleSelected === :');
+
+    console.log('handleSelected :', event.detail.selectedValues);
+    // console.log('handleSelected :', event.data.selectedValues);
+    // console.log('handleSelected :', event.data.selectedValues);
+        //     this.selectedValues = event.detail.selectedValues;
+    }
     @track res2;
     @track
     value2="";
@@ -42,11 +69,11 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
     value4;
     value5;
     
-    @track options1 = []; // Définir les options pour la combobox 1
+    @track options1= []; // Définir les options pour la combobox 1
     @track isCombobox2Disabled = true;
-    @track options2 = undefined; // Définir les options pour la combobox 2
+    @track options2 = []; // Définir les options pour la combobox 2
     @track isCombobox3Disabled = true;
-    @track options3; // Définir les options pour la combobox 3
+    @track options3 = []; // Définir les options pour la combobox 3
     @track isBtn = true;
     @track isBtnGetAcc = true;
     @track resBtn;
@@ -75,7 +102,7 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
     
     @track isCombobox5Disabled = true;
     @track options5; // Définir les options pour la combobox 5
-    @track selectedvalues; // Définir les options pour la combobox 5
+    // @track selectedvalues; // Définir les options pour la combobox 5
     
     @track options6; // Définir les options pour la combobox 5
     @track isTooltipVisible = false;
@@ -95,6 +122,8 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
     @track mymessage;
     // @track isCheckedMap = {};
     @track modalClass = 'modal';
+    @track counstol;
+    @track labelButton = 'Clients'
     // openModal() {
     //   this.modalClass = 'modal show';
     // }
@@ -103,37 +132,161 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
     // }
     // constlistSegName = ["Super Elite (13)","Elite (10)","VVIC (11)","VIC (13)","VGC (13)","GC (13)","Prospect (15)","Inactive (13)"];
     // constArrValSeg = [13,10,11,13,13,13,15,13];
+    // @track currentOptions = [];
+    // @track selectedItems = [];
+    // @track selectedOptions = [];
+    // resetMultiCombobox() {
+    //     // Réinitialiser les options
+    //     this.options1 = [];
+    //     this.options2 = [];
+    //     this.options3 = [];
+    
+    //     // Remonter le composant en changeant la clé
+    //     this.keyForMultiCombobox += 1;
+    // }
     async connectedCallback() {
         this.options1 = (await getCountries())
         .map(item=>({label:item.Name, value:item.Id}));
+        // this.options1 = (await this.countryData());
+        // this.counstol = (await this.getCountryStores());
     }
-  
+    // get revr(){
+    //     return true
+    //     // const comboboxId = event.target.auraId;
+    //     // console.log(comboboxId);
+    //     // const comboboxToReset = this.template.querySelector(`[aura:id='combobox2']`);
+    //     // Réinitialisez le combobox spécifique
+    //     // comboboxToReset.resetFlag = !comboboxToReset.resetFlag;
+    // }
+    reset1(){
+        this.revr = !this.revr;
+        console.log("this.revr : " + JSON.stringify(this.revr));
+
+
+        const comboboxEvent = new CustomEvent('resett');
+        // `[aura:id='${comboboxId}']`
+        this.template.querySelector(`[aura:id='combobox2']`).dispatchEvent(comboboxEvent);
+        // let test =  this.template.querySelector('c-multi-combobox')[1]
+        // console.log("this.test : " + JSON.stringify(this.test));
+      
+        // const comboboxId = event.target.auraId;
+        // console.log("comboboxId : " + JSON.stringify(comboboxId));
+        // console.log(comboboxId);
+
+
+        // const comboboxToReset = this.template.querySelector(`[aura:id='combobox2']`);
+        // console.log('comboboxToReset : ' + JSON.stringify(comboboxToReset));
+        // // console.log(comboboxToReset);
+
+        // // const comboboxToReset = this.template.querySelector(`[aura:id='${comboboxId}']`);
+        // // Réinitialisez le combobox spécifique
+        // comboboxToReset.resetFlag = !comboboxToReset.resetFlag;
+        // console.log('comboboxToReset.resetFlag : ' + JSON.stringify(comboboxToReset.resetFlag));
+    }
     async handleCombobox1Change(event) {
-        this.res1 = (event.target.value).split(";");
-        // console.log(this.res1);
-        // console.log(typeof this.res1);
-        this.options2 = (await getStores({lstCtry: this.res1}))
+        // this.res1 = (event.target.value).split(";");
+        // this.res1 = (event.target.value);
+        // refreshApex(this.options2=[]);
+        
+        this.res1 = (event.detail);
+        console.log(JSON.stringify(event.detail));
+        // let result = this.res1.map(function(item) {
+            //     return item.value;
+            // });
+            let result = this.res1.map(item => item.value);
+            // console.log("result : ");
+            // console.log(result);
+            console.log("resultSTRING : ");
+            console.log(JSON.stringify(result));
+            // const comboboxToReset = await this.template.querySelector(`[label='Stors']`);
+            
+            this.isCombobox2Disabled = false; // Active le deuxième combobox
+            // Réinitialisez le combobox spécifique
+            // comboboxToReset.resetFlag = await !comboboxToReset.resetFlag;
+              this.options2 = (await getStores({lstCtry: result}))
+//   this.options2 = (await getStores({lstCtry: (event.detail).map(item => item.value)}))
         .map(item=>({label:item.Nom_du_magasin__c, value:item.Main_Boutique__c}));
+        // console.log(JSON.stringify((event.detail).map(item => item.id)));
+        // this.lstIdAccounts = this.selectedRows.map(row => row.Id);
+        console.log("this.storeOptions");
+        console.log(JSON.stringify(this.options2));
+        // await console.log(JSON.stringify(this.counstol));
+        // console.log(JSON.stringify(event.currentOptions));
+        // console.log(JSON.stringify(this.currentOptions));
+        // console.log(JSON.stringify(this.selectedItems));
+        // console.log(JSON.stringify(this.selectedOptions));
+        // console.log(event.detail.selectedOptions);
+        // console.log(typeof event.target.selectedOptions);
+        // this.options2 = (await getStores({lstCtry: this.res1}))
+        // .map(item=>({label:item.Nom_du_magasin__c, value:item.Main_Boutique__c}));
         // refreshApex(this.options2);
         // refreshApex(this.value2);
         // this.isCombobox2Disabled = !this.options2 || this.options2.length === 0;
-        this.isCombobox2Disabled = false; // Active le deuxième combobox
     }
    
     async handleCombobox2Change(event) {
-        
-        this.dis1 = true;
-        this.dis1 = false;
-        this.options3 = (await getOwners({lstStors: event.detail.value.split(";")}))
-        .map(item=>({label:item.FirstName+' '+item.LastName +' ('+item.accountCount+')', value:item.OwnerId}));
-        // this.value3 = '';
+        this.res2 = (event.detail).map(item => item.value);
+        console.log(JSON.stringify(this.res2));
+
         this.isCombobox3Disabled = false; // Active le combobox 3
+
+
+        // console.log(JSON.stringify(event.detail));
+        // console.log(JSON.stringify(event.detail.value.split(";")));
+        // let result = this.res2.map(function(item) {
+        //     return item.value;
+        // });
+
+        // this.dis1 = true;
+        // this.dis1 = false;
+        // this.options3 = (await getOwners({lstStors: event.detail.value.split(";")}))
+        this.options3 = (await getOwners({lstStors: this.res2}))
+        .map(item=>({label:item.FirstName+' '+item.LastName +' ('+item.accountCount+')', value:item.OwnerId, accountCount:item.accountCount,
+    store:{label:item.Nom_du_magasin__c, value:item.Main_Boutique__c},country:{label:item.Name, value:item.Code_ISO3__c}
+    // store:{label:item.Name, value:item.Code_ISO3__c},country:{label:item.Name, value:item.Code_ISO3__c}
+    }));
+        // // this.value3 = '';
         this.isBtn = false; // Activer le btn
     }
     
     async handleCombobox3Change(event) {
         // this.resBtn = event.detail.value.split(";");
-        this.resBtn = await getAccounts2({lstOwner: event.detail.value.split(";")});
+
+        this.res3 = (event.detail);
+        console.log(JSON.stringify(event.detail));
+        
+        let total = event.detail.reduce((acc, item) => acc + item.accountCount, 0);
+        console.log("Total accountCount : ", total);
+        this.labelButton = total + " Clients"
+         
+         let optionFilterCountry = (event.detail).map(item=>({label:item.country.label, value:item.country.value}));
+         console.log("optionFilterCountry : ");
+         console.log(JSON.stringify(optionFilterCountry));
+
+         let optionFilterCountryUnique = Array.from(new Set(event.detail.map(item => JSON.stringify(item.country))))
+         .map(json => JSON.parse(json))
+         .map(item => ({ label: item.label, value: item.value }));
+         console.log("optionFilterCountryUnique : ");
+         console.log(JSON.stringify(optionFilterCountryUnique));
+
+
+         let optionFilterStors = (event.detail).map(item=>({label:item.store.label, value:item.store.value}));
+         console.log("optionFilterStors : ");
+         console.log(JSON.stringify(optionFilterStors));
+        
+         let optionFilterStorsUnique = Array.from(new Set(event.detail.map(item => JSON.stringify(item.store))))
+         .map(json => JSON.parse(json))
+         .map(item => ({ label: item.label, value: item.value }));
+        console.log("optionFilterStorsUnique : ");
+        console.log(JSON.stringify(optionFilterStorsUnique));
+
+        let result = this.res3.map(function(item) {
+            return item.value;
+        });
+
+
+        this.resBtn = await getAccounts2({lstOwner: result});
+        // this.resBtn = await getAccounts2({lstOwner: event.detail.value.split(";")});
         this.isBtnGetAcc = false; // Activer le btn
         // this.filteredData  =  (await this.generateData(this.resBtn));
         // this.filteredData  =  (await this.generateData(this.resBtn));
@@ -155,11 +308,11 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
         console.log(JSON.stringify(this.resBtn));
         console.log(JSON.stringify(this.options2));
         console.log(JSON.stringify(this.options3));
-        this.datag =  this.filteredData;
+        this.datag =  [...this.filteredData];
         this.showTable = true;
         // await this.getRecords();
         // this.options4 = this.options1;
-
+        this.resetMultiCombobox();
         // this.loadMoreOffset = 0;
 
         // console.log(JSON.stringify(this.resBtn));
@@ -265,12 +418,12 @@ export default class AppRealloction extends NavigationMixin (LightningElement) {
     async handleCombobox5Change(event){
         this.isCards = false;
         console.log("L205: " );
-        console.log(JSON.stringify(this.selectedvalues));
+        // console.log(JSON.stringify(this.selectedvalues));
         console.log("L207: " );
         // console.log(JSON.stringify(this.selectedvalues));
         this.newowner = undefined;
         console.log("New event: " + event.detail.value);
-        console.log("New event: " + this.selectedvalues);
+        // console.log("New event: " + this.selectedvalues);
         // const owners = await getAccounts({ lstStors: event.detail.value });
         const owners = await getOwnersCard({ lstStors: event.detail.value });
         // const owners2 = await JSON.stringify(owners);

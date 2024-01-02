@@ -1,33 +1,61 @@
 public with sharing class AppRealloc {
     @AuraEnabled(cacheable=true)
     public static List<Country__c> GetCountries(){
-        return [SELECT  Id, Name 
+    return [
+            SELECT  Id, Name 
                 FROM Country__c   
-                ORDER BY Name];
-    }
+                ORDER BY Name
+            ];
+        }
+                        @AuraEnabled(cacheable=true)
+                        public static List<Country__c> GetCountryStores(){
+                        return[SELECT Id, Name,
+                                     (SELECT Id, Nom_du_magasin__c 
+                                      FROM Stores1__r
+                                      ORDER BY Nom_du_magasin__c) 
+                               FROM Country__c 
+                               ORDER BY Name];
+                        }
+                        // SELECT  Id, Name 
+                        //     FROM Country__c   
+                        //     ORDER BY Name
     @AuraEnabled
     public static List<AggregateResult> GetStores(List<String> lstCtry){
         return[SELECT Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c,  Main_Boutique__c 
-               FROM Account 
-               WHERE Main_Boutique__c != null AND Main_Boutique__r.Code_ISO3__c IN :lstCtry
-               GROUP BY Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c
-               ORDER BY Main_Boutique__r.Nom_du_magasin__c];
+        FROM Account 
+        WHERE Main_Boutique__c != null AND Main_Boutique__r.Code_ISO3__c IN :lstCtry
+        GROUP BY Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c
+        ORDER BY Main_Boutique__r.Nom_du_magasin__c];
     }
-       
-
-        // public static List<Store__c> GetStores(List<String> lstCtry){
-        // return [SELECT Id, Nom_du_magasin__c  
-        //         FROM Store__c 
-        //         WHERE Code_ISO3__c IN :lstCtry 
-        //         ORDER BY Nom_du_magasin__c];
-          //      // AND Code_ISO3__c IN :storActive
-    // }
+    // SELECT Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c,  Main_Boutique__c , Main_Boutique__r.Code_ISO3__r.iso__c
+    //     FROM Account 
+    //     WHERE Main_Boutique__c != null AND Main_Boutique__r.Code_ISO3__c != null
+    //     GROUP BY Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c, Main_Boutique__r.Code_ISO3__r.iso__c
+    //     ORDER BY Main_Boutique__r.Nom_du_magasin__c
+    
+    @AuraEnabled
+        public static List<Store__c> GetStores2(List<String> lstCtry){
+        return [SELECT Id, Nom_du_magasin__c  
+                FROM Store__c 
+                WHERE Code_ISO3__c IN :lstCtry 
+                ORDER BY Nom_du_magasin__c];
+            }
+            // AND Code_ISO3__c IN :storActive
+            // SELECT Id, Nom_du_magasin__c , Code_ISO3__r.iso__c 
+            //             FROM Store__c 
+            //             WHERE Code_ISO3__c != null 
+            //             ORDER BY Code_ISO3__r.iso__c 
     @AuraEnabled
     public static List<AggregateResult> GetOwners(List<String> lstStors){
-        return [SELECT Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, OwnerId, Owner.LastName, Owner.FirstName, COUNT(Id) accountCount 
+        return [SELECT
+        Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c,  Main_Boutique__r.Code_ISO3__c, Main_Boutique__r.Code_ISO3__r.Name,  OwnerId, Owner.LastName, Owner.FirstName, COUNT(Id) accountCount 
+        // Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, OwnerId, Owner.LastName, Owner.FirstName, COUNT(Id) accountCount 
         FROM Account 
         WHERE Main_Boutique__c IN :lstStors  
-        GROUP BY Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, OwnerId , Owner.LastName, Owner.FirstName];
+        GROUP BY  Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, Main_Boutique__r.Code_ISO3__c, Main_Boutique__r.Code_ISO3__r.Name, OwnerId , Owner.LastName, Owner.FirstName
+        order by Main_Boutique__r.Nom_du_magasin__c
+        //  Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, OwnerId , Owner.LastName, Owner.FirstName
+        ];
     }
     @AuraEnabled
     public static List<AggregateResult> GetOwnersCard(List<String> lstStors){

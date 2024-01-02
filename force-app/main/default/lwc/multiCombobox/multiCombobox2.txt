@@ -1,0 +1,252 @@
+/* eslint-disable @lwc/lwc/valid-track */
+import { api, LightningElement, track } from 'lwc';
+
+/**
+ * Combobox with different configuration options that also supports multi select.
+ * @alias MultiCombobox
+ * @extends LightningElement
+ * @hideconstructor
+ *
+ * @example
+ * <c-multi-combobox label="Products" name="products" options={options} ... required></c-multi-combobox>
+ */
+export default class MultiCombobox extends LightningElement {
+  /**
+   * If present, the combobox is disabled and users cannot interact with it.
+   * @type {boolean}
+   * @default false
+   */
+  // @api disabled = false;
+  @api isDisabled = false;
+
+  /**
+   * Text label for the combobox.
+   * @type {string}
+   * @default ''
+   */
+  @api label = '';
+
+  /**
+   * Specifies the name of the combobox.
+   * @type {string}
+   */
+  @api name;
+
+  /**
+   * A list of options that are available for selection. Each option has the following attributes: label and value.
+   * @type {Array}
+   * @example
+   * options = [
+   *   {
+   *     "label": "Option 1",
+   *     "value": "option1"
+   *   },
+   *   {
+   *     "label": "Option 2",
+   *     "value": "option2"
+   *   },
+   * ]
+   */
+  @api options = [];
+  // @api currentOptions = [];
+
+  /**
+   * Text that is displayed before an option is selected, to prompt the user to select an option.
+   * @type {string}
+   * @default 'Select an Option'
+   */
+  @api placeholder = 'Select an Option';
+
+  /**
+   * If present, the combobox is read-only. A read-only combobox is also disabled.
+   * @type {boolean}
+   * @default false
+   */
+  @api readOnly = false;
+
+  /**
+   * If present, a value must be selected before a form can be submitted.
+   * @type {boolean}
+   * @default false
+   */
+  @api required = false;
+
+  /**
+   * If present, the combobox only allows the selection of a single value.
+   * @type {boolean}
+   * @default false
+   */
+  @api singleSelect = false;
+
+  /**
+   * If present, the combobox will show a pill container with the currently selected options.
+   * @type {boolean}
+   * @default false
+   */
+  @api showPills = false;
+
+  @track currentOptions = [];
+  // @track
+  // currentOptions = JSON.parse(JSON.stringify(this.options));
+
+  @track selectedItems = [];
+  @track selectedOptions = [];
+  isInitialized = false;
+  isLoaded = false;
+  isVisible = false;
+  // isDisabled = false;
+  @track searchTerm = '';
+
+
+  // @track resetFlag;
+  // @track _resetFlag = false;
+
+  // get resetFlag() {
+  //   return this._resetFlag;
+  // }
+
+  // set resetFlag(value) {
+  //   if (value !== this._resetFlag) {
+  //     this._resetFlag = value;
+  //     this.resetComponent();
+  //   }
+  // }
+
+  connectedCallback() {
+    this.isDisabled = this.disabled || this.readOnly;
+    this.hasPillsEnabled = this.showPills && !this.singleSelect;
+    if (this.options.length > 0) {
+    this.currentOptions = this.options;}
+    // this.addEventListener('resett', () => {
+    //   this.resetComponent();
+    // });
+  }
+
+ resetComponent() {
+    console.log('resetComponent');
+    this.deselectAll();
+    this.currentOptions = [];
+    this.searchTerm = '';
+    this.currentOptions = JSON.parse(JSON.stringify(this.options));
+    // this.currentOptions = JSON.parse(JSON.stringify(this.currentOptions));
+  }
+
+  get filteredOptions() {
+    if (this.currentOptions) {
+        return this.currentOptions.filter(option =>
+            option.label.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+    }
+    return [];
+}
+selectAll() {
+  this.currentOptions.forEach((item) => (item.selected = true));
+  this.setSelection();
+  this.searchTerm = '';
+  this.dispatchEvent(new CustomEvent('change', { detail: this.getSelectedItems() }));
+}
+
+deselectAll() {
+  this.currentOptions.forEach((item) => (item.selected = false));
+  this.setSelection();
+  this.searchTerm = '';
+  this.dispatchEvent(new CustomEvent('change', { detail: [] }));
+}
+
+handleSearchInputChange(event) {
+  this.searchTerm = event.target.value;
+}
+  renderedCallback() {
+    if (!this.isInitialized) {
+      this.template.querySelector('.multi-combobox__input').addEventListener('click', (event) => {
+        this.handleClick(event.target);
+        event.stopPropagation();
+      });
+      this.template.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+      document.addEventListener('click', () => {
+        this.close();
+      });
+      this.isInitialized = true;
+      this.setSelection();
+    }
+  }
+
+  handleChange(event) {
+    this.change(event);
+  }
+
+  handleRemove(event) {
+    this.selectedOptions.splice(event.detail.index, 1);
+    this.change(event);
+  }
+
+  handleClick() {
+    // initialize picklist options on first click to make them editable
+    if (this.isLoaded === false) {
+      this.currentOptions = JSON.parse(JSON.stringify(this.options));
+      this.isLoaded = true;
+    }
+
+    if (this.template.querySelector('.slds-is-open')) {
+      this.close();
+    } else {
+      this.template.querySelectorAll('.multi-combobox__dropdown').forEach((node) => {
+        node.classList.add('slds-is-open');
+      });
+    }
+  }
+
+  change(event) {
+    // remove previous selection for single select picklist
+    if (this.singleSelect) {
+      this.currentOptions.forEach((item) => (item.selected = false));
+    }
+
+    // set selected items
+    this.currentOptions
+      .filter((item) => item.value === event.detail.item.value)
+      .forEach((item) => (item.selected = event.detail.selected));
+    this.setSelection();
+
+    //==== [btn =>]
+    const selection = this.getSelectedItems();
+    this.dispatchEvent(new CustomEvent('change', { detail: this.singleSelect ? selection[0] : selection }));
+
+    // for single select picklist close dropdown after selection is made
+    if (this.singleSelect) {
+      this.close();
+    }
+  }
+
+  close() {
+    this.template.querySelectorAll('.multi-combobox__dropdown').forEach((node) => {
+      node.classList.remove('slds-is-open');
+    });
+    this.searchTerm = '';
+    this.dispatchEvent(new CustomEvent('close'));
+  }
+
+  setSelection() {
+    const selectedItems = this.getSelectedItems();
+    let selection = '';
+    if (selectedItems.length < 1) {
+      selection = this.placeholder;
+      this.selectedOptions = [];
+    // } else if (selectedItems.length > 2) {
+    //   selection = `${selectedItems.length} Options Selected`;
+
+    //   this.selectedOptions = this.getSelectedItems();
+    } else {
+      selection = selectedItems.map((selected) => selected.label).join(', ');
+      this.selectedOptions = this.getSelectedItems();
+    }
+    this.selectedItems = selection;
+    this.isVisible = this.selectedOptions && this.selectedOptions.length > 0;
+  }
+
+  getSelectedItems() {
+    return this.currentOptions.filter((item) => item.selected);
+  }
+}

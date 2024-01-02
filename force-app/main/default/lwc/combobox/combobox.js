@@ -180,6 +180,9 @@ uniqueId = uniqueStrGenerator(); // generate this Id to use in the attribute map
     },
     get _value() {
         return this._selectedValues ? this._selectedValues.map(obj => obj.value).join(SEPERATOR) : '';
+        // return this._selectedValues ? this._selectedValues.map(obj =>({label:obj.label, value:obj.value})).join(SEPERATOR) : '';
+        // return this._selectedValues ? this._selectedValues.map(obj =>({label:obj.label, value:obj.value})) : '';
+        // return this._selectedValues;
     },
     get _clearMode(){
         return this.autocomplete && (this.value && this.value.length > 0 && !this.multiselect) ? true : false;

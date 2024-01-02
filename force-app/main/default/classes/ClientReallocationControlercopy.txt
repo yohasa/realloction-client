@@ -5,10 +5,6 @@ public with sharing class ClientReallocationControler {
                 FROM Country__c   
                 ORDER BY Name];
     }
-    @AuraEnabled(cacheable=true)
-    public static List<AggregateResult> GetSegm(){
-        return [SELECT Segment__c FROM Account GROUP BY Segment__c ORDER BY Segment__c];
-    }
     @AuraEnabled
     public static List<AggregateResult> GetCountries2(List<String> lstOwner){
         return[SELECT  Main_Boutique__r.Code_ISO3__c,  Main_Boutique__r.Code_ISO3__r.Name
@@ -33,18 +29,7 @@ public with sharing class ClientReallocationControler {
                 FROM Store__c 
                 WHERE Code_ISO3__c IN :lstCtry 
                 ORDER BY Nom_du_magasin__c];
-        }
-
-    @AuraEnabled
-    public static List<Country__c> GetCountryStores(){
-    return[SELECT Id, Name,
-                 (SELECT Id, Nom_du_magasin__c 
-                  FROM Stores1__r
-                  ORDER BY Nom_du_magasin__c) 
-           FROM Country__c 
-           ORDER BY Name];
     }
-
     @AuraEnabled
     public static List<AggregateResult> GetOwners(List<String> lstStors){
         return [SELECT Main_Boutique__c, Main_Boutique__r.Nom_du_magasin__c, OwnerId, Owner.LastName, Owner.FirstName, COUNT(Id) accountCount 
@@ -93,50 +78,62 @@ public with sharing class ClientReallocationControler {
         }
         return Database.query( query );        
     }
-    // public static List<Account> GetAccounts4(List<String> lstOwner, Integer offset, String searchKey, String segmentOptions, String countryOptions, String storeOptions, Bollean exModifIn3day, String sortBy, String sortDirection){
     @AuraEnabled
-        public static List<Account> GetAccounts4(
-            List<String> lstOwner, 
-            Integer offset, 
-            String searchKey, 
-            String segmentOptions, 
-            String countryOptions, 
-            String storeOptions, 
-            Boolean exModifIn3day,  // Correction ici
-            String sortBy, 
-            String sortDirection
-        ) {
-        String query = 'SELECT Id, Name, PersonEmail, Segment__c, OwnerId, Owner.Name, Main_Boutique__r.Nom_du_magasin__c  FROM Account  WHERE RecordType.Id= \'012Qy000000QRvpIAG\' ';
+    public static List<Account> GetAccounts4(List<String> lstOwner, Integer offset, Integer end, String searchKey, String segmentOptions, String storeOptions, String sortBy, String sortDirection){
+        Integer limi = Database.query( query ).lenght();
+        String query = 'SELECT Id,  LastName, FirstName, PersonEmail, Segment__c, OwnerId, Owner.LastName, Owner.FirstName, Main_Boutique__r.Nom_du_magasin__c  FROM Account  WHERE RecordType.Id= \'012Qy000000QRvpIAG\' ';
         system.debug('query---'+query);
-        if ( lstOwner != null && !lstOwner.isEmpty() ) {
+        if ( lstOwner != null ) {
         query += ' AND OwnerId  = :lstOwner';
         }
         if ( searchKey != null && searchKey != '' ) {
             String key = '%' + searchKey + '%';
             // String keye = '%' + searchKey + '%';
-            query += ' AND ( Name LIKE :key OR Id = :searchKey )';
+            query += ' AND ( PersonEmail LIKE :key OR Id = :searchKey )';
             // query += ' AND (LastName LIKE '+key+' OR FirstName LIKE '+key+' OR Id LIKE '+key+')';
         }
         if ( segmentOptions != null && segmentOptions != '' ) {
             query += ' AND Segment__c   = :segmentOptions';
         }
         if ( storeOptions != null && storeOptions != '' ) {
-            query += ' AND Main_Boutique__c = :storeOptions';
-        }
-        if ( CountryOptions != null && CountryOptions != '' ) {
-            query += ' AND Main_Boutique__r.Code_ISO3__c = :countryOptions';
-        }
-        if (exModifIn3day == true ) {
-            query += ' AND LastModifiedDate < LAST_N_DAYS:3';
+            query += 'AND Main_Boutique__c = :storeOptions';
         }
         if ( sortBy != null && sortDirection != null ) {
             query += ' ORDER BY ' + sortBy + ' ' + sortDirection;
         }
         if ( offset < 2001 ) {
-        query = query + ' LIMIT 50 OFFSET '+ offset;
+        query = query + ' LIMIT '+ end +' OFFSET '+ offset;
         }
         return Database.query( query );        
     }
+    @AuraEnabled
+    public static List<Account> GetAccounts4(List<String> lstOwner, Integer offset, Integer end, String searchKey, String segmentOptions, String storeOptions, String sortBy, String sortDirection){
+        String query = 'SELECT Id,  LastName, FirstName, PersonEmail, Segment__c, OwnerId, Owner.LastName, Owner.FirstName, Main_Boutique__r.Nom_du_magasin__c  FROM Account  WHERE RecordType.Id= \'012Qy000000QRvpIAG\' ';
+        system.debug('query---'+query);
+        if ( lstOwner != null ) {
+        query += ' AND OwnerId  = :lstOwner';
+        }
+        if ( searchKey != null && searchKey != '' ) {
+            String key = '%' + searchKey + '%';
+            // String keye = '%' + searchKey + '%';
+            query += ' AND ( PersonEmail LIKE :key OR Id = :searchKey )';
+            // query += ' AND (LastName LIKE '+key+' OR FirstName LIKE '+key+' OR Id LIKE '+key+')';
+        }
+        if ( segmentOptions != null && segmentOptions != '' ) {
+            query += ' AND Segment__c   = :segmentOptions';
+        }
+        if ( storeOptions != null && storeOptions != '' ) {
+            query += 'AND Main_Boutique__c = :storeOptions';
+        }
+        if ( sortBy != null && sortDirection != null ) {
+            query += ' ORDER BY ' + sortBy + ' ' + sortDirection;
+        }
+        if ( offset < 2001 ) {
+        query = query + ' LIMIT '+ end +' OFFSET '+ offset;
+        }
+        return Database.query( query );        
+    }
+
 
     @AuraEnabled
     public static List<Account> GetAccs( String searchKey, String sortBy, String sortDirection) {
@@ -181,3 +178,5 @@ public with sharing class ClientReallocationControler {
         }
     }
 }
+    
+        

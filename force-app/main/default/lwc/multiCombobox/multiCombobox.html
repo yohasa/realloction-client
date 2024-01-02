@@ -1,0 +1,101 @@
+<template>
+    <div class="slds-form-element">
+      <label if:true={label} class="slds-form-element__label">
+        <abbr if:true={required} title="required" class="slds-required">*</abbr>
+        {label}</label> <span if:false={singleSelect}> [selected : {selectedOptions.length} / {currentOptions.length}]</span>
+        
+      <div class="slds-form-element__control">
+        <div class="slds-combobox_container">
+          <!-- <lightning-button label="reset"  onclick={resetComponent}></lightning-button> -->
+          <!-- <lightning-icon icon-name='action:refresh'  alternative-text='refresh' size='x-small' title='refresh'></lightning-icon> -->
+                   <div
+          class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-picklist multi-combobox__dropdown">
+          <div class="slds-combobox_form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+              <input
+                class="slds-combobox__input multi-combobox__input"
+                aria-label="Multi Select Combobox Input"
+                aria-controls="multi-pick-list-dropdown-items"
+                role="textbox"
+                type="text"
+                value={selectedItems}
+                required={required}
+                disabled={isDisabled}
+                readonly
+              />
+              <span
+                class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right multi-combobox__icon"
+                title="Click to open the dropdown"
+                >
+               
+                <lightning-icon
+                  icon-name="utility:down"
+                  size="xx-small"
+                  alternative-text="Click here"
+                  class="slds-icon slds-icon-ed slds-icon--x-small slds-icon-text-default"
+                >
+              </lightning-icon>
+            </span>
+          </div>
+          <div
+          class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid multi-combobox__listbox"
+          aria-label="Multi Select Combobox Dropdown"
+          role="listbox" 
+          >
+   
+          <div class="slds-box slds-page-header  slds-text-align_center" if:false={singleSelect}>
+          <div class="slds-p-horizontal_medium slds-slide-from-left-to-right slds-grid slds-gutters"> 
+            <div class="slds-col slds-size_1-of-8 slds-p-horizontal_medium">
+              <!-- <lightning-button-icon  icon-name='utility:multi_select_checkbox'  onclick={selectAll} alternative-text='multi_select_checkbox' size='small' title='multi_select_checkbox'></lightning-button-icon> -->
+              <lightning-button-icon icon-name="utility:multi_select_checkbox"  onclick={selectAll}  variant="container" alternative-text="Select All"  title="Select All"></lightning-button-icon>
+            </div>
+            <div class="slds-col slds-size_1-of-8 slds-p-horizontal_medium">
+              <!-- <lightning-button name='utility:recycle_bin_empty'  onclick={deselectAll} alternative-text='recycle_bin_empty' size='small' title='recycle_bin_empty'></lightning-button> -->
+              <lightning-button-icon icon-name="utility:delete"   onclick={deselectAll}  variant="container" alternative-text="deselectAll"  title="deselectAll"></lightning-button-icon>
+            </div>
+            <div class="slds-col  slds-p-horizontal_xx-small">
+            </div>
+            <div class="slds-col slds-size_5-of-8  slds-p-horizontal_medium">
+              <lightning-input type="search" onchange={handleSearchInputChange}  label= "" variant = label-hidden
+              placeholder="Search"></lightning-input>
+            
+            </div>
+           
+            <div class="slds-col slds-size_1-of-8 slds-p-horizontal_medium" if:false={instant}>
+              <!-- <lightning-icon icon-name='action:approval'  onclick={fetchSelected} alternative-text='enter' size='x-small' title='enter'></lightning-icon> -->
+              <lightning-button-icon icon-name="utility:save"  onclick={fetchSelected}    variant="container" alternative-text="Save" title="Save"></lightning-button-icon>
+            
+            </div>
+          </div>
+          </div>
+              <!-- <div class="slds-combobox_form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                <span
+                class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right multi-combobox__icon"
+                title="Click to open the dropdown"
+                >
+                 
+              </span>
+            </div> -->
+              <!-- <lightning-button label="Select All"  onclick={selectAll}></lightning-button> -->
+              
+              <!-- <lightning-button label="Deselect All"  onclick={deselectAll}></lightning-button> -->
+
+              <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                <template for:each={filteredOptions} for:item="item">
+                  <c-multi-combobox-item key={item.value} item={item} onchange={handleChange}>
+                  </c-multi-combobox-item>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div if:true={hasPillsEnabled}>
+        <lightning-pill-container
+          if:true={isVisible}
+          items={selectedOptions}
+          variant="bare"
+          onitemremove={handleRemove}
+        ></lightning-pill-container>
+      </div>
+    </div>
+  </template>

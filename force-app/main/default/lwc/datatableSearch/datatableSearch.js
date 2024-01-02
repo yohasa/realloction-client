@@ -51,8 +51,9 @@ export default class DatatableSearch extends LightningElement {
             if(searchFilter.length <= 1){
                 //return all data if input is invalid
                 let returnObj = {filteredData: this.allData, searchTerm: searchFilter, validTerm:false}
-                let searchResultFound = new CustomEvent('filtered', {detail: returnObj});
-                this.dispatchEvent(searchResultFound);
+                this.dispatchFilteredEvent(returnObj);
+                // let searchResultFound = new CustomEvent('filtered', {detail: returnObj});
+                // this.dispatchEvent(searchResultFound);
             } else {
                     // Send search event if no user input for length of SEARCH_DELAY in ms and input is valid
                 this.filterData(searchFilter)
@@ -67,10 +68,12 @@ export default class DatatableSearch extends LightningElement {
             //searches for an exact character match but is not case sensitive
             let regex = new RegExp(searchFilter, "i");
             // The filter checks each object on every field passed in, in the fieldsToFilterOn array, if any matches are found the object is returned
-            results = this.allData.filter(row => {
+            // results = this.allData.filter((card) => {
+                results = this.allData.filter(row => {
                 let matchFound = false;
                 this.fieldsToFilterOn.forEach(filterFieldName => {
                     if(regex.test(row[filterFieldName])){
+                    // if (regex.test(card[filterFieldName])) {
                         matchFound = true;
                     }
                 });
@@ -78,11 +81,15 @@ export default class DatatableSearch extends LightningElement {
             })
             //return obj constructed
             let returnObj = {filteredData: results, searchTerm: searchFilter, validTerm:true}
-            let searchResultFound = new CustomEvent('filtered', {detail: returnObj});
-            this.dispatchEvent(searchResultFound);
+            this.dispatchFilteredEvent(returnObj);
+            // let searchResultFound = new CustomEvent('filtered', {detail: returnObj});
+            // this.dispatchEvent(searchResultFound);
         } catch (e) {
             this.data = [];
         }
-            
+    }
+    dispatchFilteredEvent(returnObj) {
+        let searchResultFound = new CustomEvent('filtered', { detail: returnObj });
+        this.dispatchEvent(searchResultFound);
     }
 }

@@ -1,0 +1,147 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<template>
+  <c-header-card title="Reallocations de Clients" show-icon></c-header-card>
+  <lightning-card>
+    
+    <lightning-tabset variant="appRealloction">
+      
+      <lightning-tab label="SINGLE REALOC - (Multi to One Owner)">
+        
+         <lightning-card>
+          <c-generic-header header-title="Select" is-heading1 show-icon icon-name="standard:account"></c-generic-header>
+          <div class="slds-grid slds-wrap">
+              <!-- <div class="slds-p-horizontal_medium slds-grid slds-gutters"> -->
+            <div class="slds-col slds-size_2-of-10 slds-p-horizontal_medium slds-m-around_xxx-small">
+              <c-combobox name="combobox1" label="Country" options={countryOptions} value={value1} multiselect=true
+                autocomplete=true disabled={dis1} onchange={handleCombobox1Change}></c-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-10 slds-m-around_xxx-small">
+              <c-combobox name="combobox2" label="Stors" options={storeOptions} value={value2} multiselect=true
+                autocomplete=true disabled={isCombobox2Disabled} onchange={handleCombobox2Change}></c-combobox>
+            </div>
+            <div class="slds-col slds-size_4-of-10 slds-m-around_xxx-small">
+              <c-combobox name="combobox3" label="Owners" options={ownerOptions} value={value3} multiselect=true
+                autocomplete=true disabled={isCombobox3Disabled} onchange={handleCombobox3Change}></c-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-10 slds-align_absolute-center slds-m-around_xxx-small"
+              style="height:5rem">
+              <lightning-button variant="brand" title="get clients" icon-name="utility:download" label="Clients"
+                onclick={handleClickBnt} disabled={isBtnGetAcc}></lightning-button>
+            </div>
+          </div>
+         </lightning-card>
+
+
+         <lightning-card>
+          <div>
+            <c-generic-header header-title="Result" is-heading3 show-icon
+              icon-name="standard:customers"></c-generic-header>
+          </div>
+          <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_9-of-12">
+              <lightning-card if:true={showTable}>
+                <div class="slds-var-p-around_small">
+                  <div class="slds-p-horizontal_medium slds-grid slds-gutters">
+                    <div class="slds-col">
+                      <lightning-input type="search" onchange={handleKeyChange} class="slds-m-bottom_small"
+                        label="Search" placeholder={searchKey}></lightning-input>
+                    </div>
+                      <div class="slds-col">
+                      <lightning-icon icon-name='utility:filter' alternative-text='filter' size='large'
+                      title='filter'></lightning-icon>
+                       <div class="slds-col">
+                        <lightning-combobox label="Segment" placeholder="Select a segment" options={segmentOptions}
+                        onchange={handelSelectSegment}></lightning-combobox>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="slds-box" style="height: 500px;">
+                    <lightning-datatable key-field="Id" data={datag} columns={columnsg} sorted-by={sortedBy}
+                      sorted-direction={sortedDirection} onsort={sortColumns} show-row-number-column
+                      enable-infinite-loading={isMoreData} onloadmore={loadMoreData}
+                      onrowselection={handleRowSelection}>
+                    </lightning-datatable>
+                  </div>
+                </div>
+              </lightning-card>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+              <c-generic-header header-title="New Owner" is-heading3 show-icon
+                icon-name="standard:customer_lifecycle_analytics"></c-generic-header>
+              <c-confirm-dialog if:true={showDialog} message={mymessage} oncancel={handleCancel}
+                onconfirm={handleConfirm}>
+              </c-confirm-dialog>
+              <div style="padding: 1%">
+                <c-combobox name="combobox4" label="CountryNewOwner" options={countryOptions} value={value1}
+                  multiselect=true autocomplete=true disabled={dis1} onchange={handleCombobox4Change}></c-combobox>
+                <c-combobox-generic style="padding: 2%" name="combobox5" label="Stors" value={value5} options={options5}
+                  disabled={isCombobox5Disabled} onchange={handleCombobox5Change}>
+                </c-combobox-generic>
+                <div class="slds-box" hidden={isCards}>
+                  <div style="margin: 1%">
+                    <lightning-icon icon-name='standard:client' alternative-text='client' size='x-small'
+                      title='client'></lightning-icon>
+                    <lightning-badge class={clasSelectNowOwner} label={txtSelectNowOwner}
+                      icon-name="action:approval"></lightning-badge>
+                  </div>
+                  <template for:each={options6} for:item="rec">
+                    <div key={rec.id} class="slds-box slds-box_small">
+
+                      <div class="slds-p-horizontal_medium slds-grid slds-gutters">
+                        <div class="slds-col" style="height:2rem">
+                          <lightning-input type="radio" name="owner" value={rec.id} data-seller-name={rec.sellerName}
+                            data-store-name={rec.storeName} data-store-id={rec.storeId} onchange={handleOwnerSelection}>
+                          </lightning-input>
+                          <lightning-icon icon-name='action:new_person_account' alternative-text='new_person_account'
+                            size='small' title='new_person_account'></lightning-icon>
+                        </div>
+                        <div class="slds-col">
+                          <lightning-card title={rec.sellerName}>
+                            <lightning-badge class="slds-badge_lightest  slds-float_right" label={rec.storeName}
+                              icon-name="standard:event"></lightning-badge>
+                          </lightning-card>
+                        </div>
+                        <div class="slds-col">
+                          <div class="custom-tooltip">
+                            <lightning-icon icon-name="utility:chart" size="small" title={rec.listSegName}>
+                            </lightning-icon>
+                            <div class="tooltip-content">
+                              <c-libs-chartjs></c-libs-chartjs>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="slds-col">
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <div style="padding: 2%">
+                  <lightning-button variant="success" label="Reallocations" title="Successful action"
+                  onclick={handleClickBntRealoc} disabled={isBtnRealoc} hidden={isCards}
+                  class="slds-m-left_x-small"></lightning-button>
+                </div>
+              </div>
+            </div>
+         </lightning-card>
+          
+      </lightning-tab>
+
+        <lightning-tab label="MASS REALOC - (Many to Many Owner)">
+        </lightning-tab>
+
+        <lightning-tab label="About">
+          <c-misc-static-resource></c-misc-static-resource>
+        </lightning-tab>
+
+    </lightning-tabset>
+
+  </lightning-card>
+</template>
+
+slds-cell-fixed
+slds-th__action
+
+<span class="slds-checkbox"><input class="datatable-select-all" type="checkbox" name="lgt-datatable-8-options" id="lgt-dt-header-factory-id-685" tabindex="-1" data-navigation="enable"><label class="slds-checkbox__label" for="lgt-dt-header-factory-id-685"><span class="slds-checkbox_faux"></span><span class="slds-form-element__label slds-assistive-text">Select All</span></label></span>
+@

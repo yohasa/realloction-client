@@ -11,75 +11,86 @@
        
           <lightning-card>
             <c-generic-header header-title="Select" is-heading1 show-icon icon-name="standard:account"></c-generic-header>
-            <!-- <div class="slds-box slds-theme_shade"> -->
-              <!-- <div> -->
-                
-                <!-- <lightning-icon icon-name="standard:account"></lightning-icon> -->
-              <!-- </div> -->
-              <!-- <div class="slds-page-header__name-title"> -->
-                  <!-- <span class="slds-page-header__title slds-truncate" title="Final Report">Select</span> -->
-                  <!-- <span class="slds-page-header__title " title="Final Report">Select</span> -->
-                <!-- </h1> -->
-              <!-- </div> -->
-            <!-- </div>   -->
-            <!-- <header class="slds-modal__header">
-                <h1 class="slds-text-heading_medium slds-hyphenate">Select</h1>
-            </header> -->
+           
 
+            <!-- <c-multi-select-combobox
+            label = "Country"
+            name = "combobox1" 
+            options = {options1}
+            onselected = {handleCombobox1Change}
+            ></c-multi-select-combobox> -->
+            <!-- onchange={handleCombobox1Change} -->
+            <!-- value={selectedValues} -->
+            <!-- <p>Valeurs sélectionnées dans le composant parent : {selectedValuesString}</p> -->
+            <!-- <c-combobox
+            name="combobox1" 
+            label="Country" 
+            options={options1}
+            onselected={handleSelectedValues}
+            multiselect = true
+            autocomplete = true
+            ></c-combobox> -->
+            <!-- disabled = {dis1} -->
+            <!-- current-options = {currentOptions} 
+            selected-items = {selectedItems}
+            selected-options = {selectedOptions} -->
+            <!-- <c-combobox
+            name="combobox2" 
+            label="Stors" 
+            options={options2}
+            value={value2}
+            multiselect = true
+            autocomplete = true
+            disabled={isCombobox2Disabled}
+            onchange={handleCombobox2Change}
+            ></c-combobox> -->
+            <!-- <c-combobox
+          name="combobox3" 
+          label="Owners" 
+          options={options3}
+          value={value3}
+          multiselect = true
+          autocomplete = true
+          disabled={isCombobox3Disabled}
+          onchange={handleCombobox3Change}
+          ></c-combobox> -->
+          <!-- disabled={isCombobox3Disabled} -->
                 <div class="slds-p-horizontal_medium slds-grid slds-gutters">
                   <div class="slds-col slds-size_2-of-10 slds-p-horizontal_medium slds-m-around_xxx-small">
-    
-
-                <c-combobox
-                name="combobox1" 
-                label="Country" 
-                options={options1}
-                value={value1}
-                multiselect = true
-                autocomplete = true
-                disabled = {dis1}
-                onchange={handleCombobox1Change}
-                ></c-combobox>
-              
-                    </div>
+                    <div>
+                  </div>      
+                    <c-multi-combobox label="Country" placeholder = "Select Country" data-label="combobox11"
+                    name="combobox1" options={options1}  aura:id="combobox1"
+                    onchange = {handleCombobox1Change} 
+                    >
+                  </c-multi-combobox>
+                </div>
+                <button type="reset" onclick={reset1}>reset</button>
                     <div class="slds-col slds-size_3-of-10 slds-m-around_xxx-small">
-                  <c-combobox
-                  name="combobox2" 
-                  label="Stors" 
-                  options={options2}
-                  value={value2}
-                  multiselect = true
-                  autocomplete = true
-                  disabled={isCombobox2Disabled}
-                  onchange={handleCombobox2Change}
-                  ></c-combobox>
+                      <c-multi-combobox label="Stors"  placeholder = "Select Stors" 
+                      isdisabled={isCombobox2Disabled}
+                    name="combobox2" options={options2}  aura:id="combobox2"
+                    onchange = {handleCombobox2Change} 
+                    >
+                  
+                  </c-multi-combobox>
+                  <!-- reset-flag = {inver} -->
                   </div>
                   <div class="slds-col slds-size_4-of-10 slds-m-around_xxx-small">
-                
-                    <c-combobox
-                  name="combobox3" 
-                  label="Owners" 
-                  options={options3}
-                  value={value3}
-                  multiselect = true
-                  autocomplete = true
-                  disabled={isCombobox3Disabled}
-                  onchange={handleCombobox3Change}
-                  ></c-combobox>
-
-                
+                  <c-multi-combobox label="Sellers" placeholder = "Select Sellers"
+                  name="OwnerWithClients" options={options3}
+                  onchange = {handleCombobox3Change}
+                  ></c-multi-combobox>
                 </div>
-              
                 <div class="slds-col slds-size_1-of-10 slds-align_absolute-center slds-m-around_xxx-small" style="height:5rem">
                       <lightning-button variant="brand"  title="get clients" 
-                      icon-name="utility:download" label="Clients"
+                      icon-name="utility:download" label={labelButton}
                       onclick={handleClickBnt} disabled={isBtnGetAcc} 
                       ></lightning-button>
-                      <!-- label="Bring the customers" -->
-                      <!-- hidden={isBtn} -->
+                      
                   </div>
                 </div>
-              </lightning-card>
+          </lightning-card>
  
               
           <lightning-card>
@@ -107,7 +118,7 @@
                               <div class="slds-col">
                                 <span class="slds-form-element__label slds-text-title_bold">
                                   <!-- Displayed Records: {data.length}</span> -->
-                                  Clients Selectioner: {lstIdAccounts.length}</span>
+                                  Clients Selectionee: {lstIdAccounts.length}</span>
                                 </div>
                                 <c-datatable-search all-data={datag} onfiltered={handleResults}></c-datatable-search>
                               </div>
@@ -287,7 +298,7 @@
 
                       
         </div>
-      </lightning-card>
+          </lightning-card>
       
             
         </lightning-tab>

@@ -19,7 +19,7 @@
                   <c-combobox
                   name="combobox1" 
                   label="Country" 
-                  options={countries}
+                  options={countryOptions}
                   value={value1}
                   multiselect = true
                   autocomplete = true
@@ -90,15 +90,12 @@
                                 type="search" 
                                 onchange={handleKeyChange} 
                                 class="slds-m-bottom_small"           
-                                label="Search By Client Name or Client Id" 
+                                label="Search" 
                                 placeholder={searchKey}></lightning-input>
                                 <span class="slds-form-element__label slds-text-title_bold">
                                   <!-- Total Records: {totalNumberOfRows}</span> -->
-                                  {lstIdAccounts.length} Clients Selected of {datag.length} Displayed</span>
+                                  {lstIdAccounts.length} of {datag.length} Clients Selected</span>
                                 </div>
-                                <div class="slds-box slds-col slds-p-horizontal_medium slds-grid slds-gutters" style="align-items: center">
-
-                               
                                 <div class="slds-col" style="top:20px">
                                   <div class="slds-float_right" >
 
@@ -110,13 +107,9 @@
                                     <lightning-combobox
                                         label="Countries"
                                         placeholder="Select a country"
-                                        options={countries}
-                                        value={selectedCountry} 
-
+                                        options={countryFiltreOptions}
                                         onchange={handelSelectFiltreCountry}
-                                        ></lightning-combobox>
-                              <!-- vous avez selectionee:  {countryName} -->
-                                        <!-- options={countryFiltreOptions} -->
+                                    ></lightning-combobox>
                                   </div>
                                   <div class="slds-col">
                                     <lightning-combobox
@@ -131,16 +124,15 @@
                                         label="Segment"
                                         placeholder="Select a segment"
                                         options={segmentOptions}
+                                        value={selectedSegment} 
                                         onchange={handleSegmentChange} 
-                                        ></lightning-combobox>
-                                        <!-- value={selectedSegment}  -->
+                                    ></lightning-combobox>
                                   </div>
-                                </div>
                                   <div class="slds-col">
-                                    <div class="slds-form-element"  style="left:6%">
+                                    <div class="slds-form-element"  style="left:10%">
                                       <label class="slds-checkbox_toggle slds-grid">
                                         <span class="slds-form-element__label slds-m-bottom_none">Exclude Clients Reallocated 3 Days</span>
-                                        <input type="checkbox" name="checkbox-toggle-18" value="checkbox-toggle-18" aria-describedby="checkbox-toggle-18" checked ="" />
+                                        <input type="checkbox" name="checkbox-toggle-18" value="checkbox-toggle-18" aria-describedby="checkbox-toggle-18" checked="" />
                                         <span id="checkbox-toggle-18" class="slds-checkbox_faux_container">
                                           <span class="slds-checkbox_faux"></span>
                                           <span class="slds-checkbox_on">Exclude</span>
@@ -193,7 +185,7 @@
               <c-combobox
               name="combobox4" 
               label="New Owner Country" 
-              options={countries}
+              options={countryOptions}
               value={value1}
               multiselect = true
               autocomplete = true

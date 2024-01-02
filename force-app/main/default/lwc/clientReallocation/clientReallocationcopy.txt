@@ -1,14 +1,12 @@
 import { LightningElement, track, api, wire } from 'lwc';
 import getCountries from '@salesforce/apex/ClientReallocationControler.GetCountries';
 import getStores from '@salesforce/apex/ClientReallocationControler.GetStores';
-import getCountryStores from '@salesforce/apex/ClientReallocationControler.GetCountryStores';
 import getOwners from '@salesforce/apex/ClientReallocationControler.GetOwners';
 import getOwnersCard from '@salesforce/apex/ClientReallocationControler.GetOwnersCard';
 // import getAccounts from '@salesforce/apex/ClientReallocationControler.GetAccounts';
 import getAccounts2 from '@salesforce/apex/ClientReallocationControler.GetAccounts2';
 import getAccounts3 from '@salesforce/apex/ClientReallocationControler.GetAccounts3';
 import getAccounts4 from '@salesforce/apex/ClientReallocationControler.GetAccounts4';
-import getSegm from '@salesforce/apex/ClientReallocationControler.GetSegm';
 // import getPie from '@salesforce/apex/ClientReallocationControler.GetPie';
 import getReallocation2 from '@salesforce/apex/ClientReallocationControler.Realloction2';
 // import STR_ID_FIELD from '@salesforce/schema/Store__c.Id';
@@ -22,22 +20,16 @@ import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 import SEGMENT_FIELD from '@salesforce/schema/Account.Segment__c';
-import { getListUi } from 'lightning/uiListApi';
-import { getRecord } from 'lightning/uiRecordApi';
-import COUNTRY_OBJECT from '@salesforce/schema/Country__c';
-// import COUNTRY_FIELD from '@salesforce/schema/Country__c.Name';
 
 const columns = [ 
-    // { label: 'LastName', fieldName: 'LastName', type: 'text', sortable: true, initialWidthType: 50},
-    // { label: 'FirstName', fieldName: 'FirstName', type: 'text', sortable: true, initialWidthType: 50 },
-    { label: 'Client Name', fieldName: 'Name', type: 'text', sortable: true, initialWidthType: 50 },
-    { label: 'Client Id', fieldName: 'Id', type: 'Id', sortable: true, initialWidthType: 30},
+    { label: 'Id', fieldName: 'Id', type: 'Id', sortable: true, initialWidthType: 30},
+    { label: 'LastName', fieldName: 'LastName', type: 'text', sortable: true, initialWidthType: 50},
+    { label: 'FirstName', fieldName: 'FirstName', type: 'text', sortable: true, initialWidthType: 50 },
     { label: 'Mail', fieldName: 'PersonEmail', type: 'email', sortable: true, initialWidthType: 100 },
     { label: 'Segment', fieldName: 'Segment__c', type: 'text', sortable: true, initialWidthType: 40 },
-    { label: 'Store Name', fieldName: 'CurentStoreName',  type: 'text', initialWidthType: 150 },
-    { label: 'Seller Name', fieldName: 'OwnerName', type: 'text', initialWidthType: 50 }
-    // { label: 'Prenom Vendeur', fieldName: 'OwFiName', type: 'text', initialWidthType: 50 }
-    // { label: 'Nom Vendeur', fieldName: 'OwLaName', type: 'text', initialWidthType: 50 },
+    { label: 'Nom du magasin', fieldName: 'Nom_du_magasin__c',  type: 'text', initialWidthType: 150 },
+    { label: 'Nom Vendeur', fieldName: 'OwLaName', type: 'text', initialWidthType: 50 },
+    { label: 'Prenom Vendeur', fieldName: 'OwFiName', type: 'text', initialWidthType: 50 }
 ];
 export default class ClientReallocation extends LightningElement {
 
@@ -114,79 +106,24 @@ export default class ClientReallocation extends LightningElement {
     @track mymessage;
     @track segmentOptions = [];
     @track selectedSegment = '';
-    @track selectedStore = '';
-    @track selectedCountry = '';
     @track countryFiltreOptions;
     @track storeFiltreOptions;
     // @track segmentSelected;
 
-
-    // @wire(getObjectInfo, { objectApiName: COUNTRY_OBJECT })
-    // countryInfo;
-    @wire(getRecord, { recordId: '$recordId', fields: ['Country__c.Name'] })
-    country;
-    get countryName() {
-        console.log('country:', JSON.stringify(this.country, null, 2));
-        return this.country.data ? this.country.data.fields.Name.value : '';
-    }
-
-    @wire(getListUi, { objectApiName: COUNTRY_OBJECT, listViewApiName: 'All' })
-    countryList;
-    get countries() {
-        if (this.countryList.data) {
-            return this.countryList.data.records.records.map(record => ({
-                label: record.fields.Name.value,
-                value: record.fields.Id.value
-            }));
-        }
-        return [];
-    }
-
-    // get countries() {
-    //     console.log('countryList:', JSON.stringify(this.countryList, null, 2));
-    //     return this.countryList.data ? this.countryList.data.records.records : [];
-    // }
-
-
-    // @wire(getPicklistValues, { recordTypeId: '$countryInfo.data.defaultRecordTypeId', fieldApiName: COUNTRY_FIELD })
-    // wiredCountryOptions({ error, data }) {
-    //     if (data) {
-    //         // Mettez à jour les options de la picklist
-    //         // eslint-disable-next-line @lwc/lwc/no-api-reassignments
-    //         this.countryOptions = [
-    //             { label: 'Sélectionnez une option', value: '' }, // Option vide
-    //             ...data.values.map(option => ({ label: option.label, value: option.value }))
-    //         ];
-    //     } else if (error) {
-    //         // Gérez les erreurs
-    //         console.error('Erreur lors de la récupération des options du pays', error);
-    //     }
-    // }
-
-    // Vous pouvez utiliser countryOptions dans votre template HTML pour afficher les options dans un menu déroulant, par exemple.
-    // @api countryOptions = [];
-
-
     @wire(getObjectInfo, { objectApiName: ACCOUNT_OBJECT })
     accountInfo;
 
-    // @wire(getPicklistValues, { recordTypeId: '$accountInfo.data.defaultRecordTypeId', fieldApiName: SEGMENT_FIELD })
-    @wire(getSegm)
+    @wire(getPicklistValues, { recordTypeId: '$accountInfo.data.defaultRecordTypeId', fieldApiName: SEGMENT_FIELD })
     wiredSegmentOptions({ error, data }) {
         if (data) {
-            console.log(data);
-            console.log(JSON.stringify(data));
             // Mettez à jour les options de la picklist
-            this.segmentOptions = data.map(option => ({ label: option.Segment__c, value: option.Segment__c }))
-            // this.segmentOptions = [
-                // { label: 'Select an option', value: '' }, // Option vide
-                // ...data.values.map(option => ({ label: option.label, value: option.value }))];
-            } else if (error) {
-                // Gérez les erreurs
-                console.error('Error retrieving segment options', error);
-            }
-            // { label: 'Select an option', value: '' }, // Option vide
-            // ...data.map(option => ({ label: option.Segment__c, value: option.Segment__c }))];
+            this.segmentOptions = [
+                { label: 'Select an option', value: '' }, // Option vide
+                ...data.values.map(option => ({ label: option.label, value: option.value }))];
+        } else if (error) {
+            // Gérez les erreurs
+            console.error('Error retrieving segment options', error);
+        }
     }
     handleSegmentChange(event) {
     this.selectedSegment = event.detail.value;
@@ -194,19 +131,6 @@ export default class ClientReallocation extends LightningElement {
         this.datag = [];
         refreshApex(this.loadData());
     }
-    handelSelectFiltreStore(event) {
-        this.selectedStore = event.detail.value;
-            console.log('Selected Store: ' + this.selectedStore);
-            // this.datag = [];
-            // refreshApex(this.loadData());
-        }
-    handelSelectFiltreCountry(event) {
-        this.selectedCountry = event.detail.value;
-            console.log('Selected Country: ' + this.selectedCountry);
-            this.datag = [];
-            refreshApex(this.loadData());
-        }
-
     // @track isCheckedMap = {};
     @track modalClass = 'modal';
     // openModal() {
@@ -218,19 +142,14 @@ export default class ClientReallocation extends LightningElement {
     // constlistSegName = ["Super Elite (13)","Elite (10)","VVIC (11)","VIC (13)","VGC (13)","GC (13)","Prospect (15)","Inactive (13)"];
     // constArrValSeg = [13,10,11,13,13,13,15,13];
     async connectedCallback() {
-        // this.countryOptions = (await getCountries())
-        // .map(item=>({label:item.Name, value:item.Id}));
+        this.countryOptions = (await getCountries())
+        .map(item=>({label:item.Name, value:item.Id}));
     }
-    
+  
     async handleCombobox1Change(event) {
-        // const aaa = await this.countries()
-        // console.log("Connect: "+ aaa);
-        console.log(JSON.stringify(event.detail.value));
         console.log(JSON.stringify(event.target.value));
-
-
         this.res1 = (event.target.value).split(";");
-        // // console.log(JSON.stringify(event.target.dataValue.label));
+        // console.log(JSON.stringify(event.target.dataValue.label));
         this.storeOptions = (await getStores({lstCtry: this.res1}))
         .map(item=>({label:item.Nom_du_magasin__c, value:item.Main_Boutique__c}));
         this.isCombobox2Disabled = false; // Active le deuxième combobox
@@ -307,19 +226,21 @@ export default class ClientReallocation extends LightningElement {
 
    async loadData(){
         // return getAccounts4({lstOwner: this.resBtn, offset: this.rowOffset, segmentOptions: this.segmentSelected, sortBy: this.sortedBy, sortDirection: this.sortedDirection})
-        return getAccounts4({lstOwner: this.resBtn, offset: this.rowOffset, searchKey: this.searchKey, segmentOptions: this.selectedSegment, CountryOptions: this.selectedCountry ,sortBy: this.sortedBy, sortDirection: this.sortedDirection})
+        return getAccounts4({lstOwner: this.resBtn, offset: this.rowOffset, searchKey: this.searchKey, segmentOptions: this.selectedSegment, sortBy: this.sortedBy, sortDirection: this.sortedDirection})
         // return getAccounts3({lstOwner: this.resBtn, offset: this.rowOffset, searchKey: this.searchKey})
         .then(result =>{
             this.isMoreData = (result.length > 0 );
             // if (result.length <51){this.isMoreData=false;}
             // let updateResult = [...this.filteredData, ...result.map(item => ({
             let updateResult = [...this.datag, ...result.map(item => ({
-                Name: item.Name,
                 Id: item.Id,
+                LastName: item.LastName,
+                FirstName: item.FirstName,
                 PersonEmail: item.PersonEmail,
                 Segment__c: item.Segment__c,
-                CurentStoreName: item.Main_Boutique__r.Nom_du_magasin__c,
-                OwnerName: item.Owner.Name,
+                Nom_du_magasin__c: item.Main_Boutique__r.Nom_du_magasin__c,
+                OwLaName: item.Owner.LastName,
+                OwFiName: item.Owner.FirstName,
             }))];
             this.datag = updateResult;
             // this.filteredData = updateResult;
@@ -586,6 +507,8 @@ generateRandomColor() {
     
         
         }
+     
+        
       
     get isBtnRealoc() {
         return this.lstIdAccounts.length > 0 && this.newowner !== undefined ?  false : true;
@@ -653,3 +576,5 @@ generateRandomColor() {
     }
         
         
+        
+  

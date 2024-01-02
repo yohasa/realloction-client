@@ -19,7 +19,7 @@
                   <c-combobox
                   name="combobox1" 
                   label="Country" 
-                  options={countries}
+                  options={countryOptions}
                   value={value1}
                   multiselect = true
                   autocomplete = true
@@ -74,92 +74,45 @@
             </div>
               <div class="slds-grid slds-wrap">
                 <div class="slds-col slds-size_9-of-12">
-                  <div class="exampleHolder" if:true={bollDatag}>
-                    <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
-                </div>
+                  
                   <lightning-card if:true={showTable}>
               
   
                     <div class="slds-var-p-around_small">
-                      <div class="slds-p-horizontal_medium slds-grid slds-gutters" style="align-items: center">
+                      <div class="slds-p-horizontal_medium slds-grid slds-gutters">
                           <!-- <span
                               class="slds-form-element__label slds-text-title_bold slds-align_absolute-center">
                               Infinite Loading Example</span> -->
                               <div class="slds-col">
-                                <lightning-input 
-                                type="search" 
-                                onchange={handleKeyChange} 
-                                class="slds-m-bottom_small"           
-                                label="Search By Client Name or Client Id" 
-                                placeholder={searchKey}></lightning-input>
                                 <span class="slds-form-element__label slds-text-title_bold">
                                   <!-- Total Records: {totalNumberOfRows}</span> -->
-                                  {lstIdAccounts.length} Clients Selected of {datag.length} Displayed</span>
+                                  Total Records: {resBtn.length}</span>
                                 </div>
-                                <div class="slds-box slds-col slds-p-horizontal_medium slds-grid slds-gutters" style="align-items: center">
-
-                               
-                                <div class="slds-col" style="top:20px">
-                                  <div class="slds-float_right" >
-
-                                    <lightning-icon icon-name='utility:filter' alternative-text='filter' size='small' title='filter'></lightning-icon> Filter
-                                  </div>
-                                </div>
-                                
                                 <div class="slds-col">
-                                    <lightning-combobox
-                                        label="Countries"
-                                        placeholder="Select a country"
-                                        options={countries}
-                                        value={selectedCountry} 
-
-                                        onchange={handelSelectFiltreCountry}
-                                        ></lightning-combobox>
-                              <!-- vous avez selectionee:  {countryName} -->
-                                        <!-- options={countryFiltreOptions} -->
-                                  </div>
-                                  <div class="slds-col">
-                                    <lightning-combobox
-                                        label="Stors"
-                                        placeholder="Select a story"
-                                        options={storeFiltreOptions}
-                                        onchange={handelSelectFiltreStore}
-                                    ></lightning-combobox>
-                                  </div>
-                                  <div class="slds-col">
                                     <lightning-combobox
                                         label="Segment"
                                         placeholder="Select a segment"
                                         options={segmentOptions}
-                                        onchange={handleSegmentChange} 
-                                        ></lightning-combobox>
-                                        <!-- value={selectedSegment}  -->
-                                  </div>
-                                </div>
-                                  <div class="slds-col">
-                                    <div class="slds-form-element"  style="left:6%">
-                                      <label class="slds-checkbox_toggle slds-grid">
-                                        <span class="slds-form-element__label slds-m-bottom_none">Exclude Clients Reallocated 3 Days</span>
-                                        <input type="checkbox" name="checkbox-toggle-18" value="checkbox-toggle-18" aria-describedby="checkbox-toggle-18" checked ="" />
-                                        <span id="checkbox-toggle-18" class="slds-checkbox_faux_container">
-                                          <span class="slds-checkbox_faux"></span>
-                                          <span class="slds-checkbox_on">Exclude</span>
-                                          <span class="slds-checkbox_off">Include</span>
-                                        </span>
-                                      </label>
-                                    </div>
+                                        onchange={handelSelectSegment}
+                                    ></lightning-combobox>
                                   <!-- <span class="slds-form-element__label slds-text-title_bold">
                                      Displayed Records: {data.length}</span> -->
                                     <!-- Clients Selectioner: {lstIdAccounts.length}</span> -->
                                   </div>
+                                  <lightning-input 
+                                  type="search" 
+                                  onchange={handleKeyChange} 
+                                  class="slds-m-bottom_small"           
+                                  label="Search" 
+                                  placeholder={searchKey}></lightning-input>
                                 <!-- </lightning-input> -->
                                 <!-- value={searchKey}> -->
                                 <!-- <c-datatable-search all-data={datag} onfiltered={handleResults}></c-datatable-search> -->
                                 </div>
-              
+                                <lightning-icon icon-name='utility:filter' alternative-text='filter' size='large' title='filter'></lightning-icon>
                       <div class="slds-box" style="height: 500px;">
           
-                       
+  
                     <lightning-datatable
                         key-field="Id" 
                         data={datag} 
@@ -192,8 +145,8 @@
   
               <c-combobox
               name="combobox4" 
-              label="New Owner Country" 
-              options={countries}
+              label="CountryNewOwner" 
+              options={countryOptions}
               value={value1}
               multiselect = true
               autocomplete = true
@@ -209,17 +162,8 @@
               options={countryOptions}
               onchange={handleCombobox4Change}>
             </c-combobox-generic> -->
-            <c-combobox
-            name="combobox5" 
-            label="New Owner Stors" 
-            options={options5}
-            value={value5}
-            multiselect = true
-            autocomplete = true
-            disabled = {isCombobox5Disabled}
-            onchange={handleCombobox5Change}
-            ></c-combobox> 
-            <!-- <c-combobox-generic 
+            
+            <c-combobox-generic 
             style="padding: 2%"
             name="combobox5" 
             label="Stors" 
@@ -227,11 +171,8 @@
             options={options5}
             disabled={isCombobox5Disabled}
             onchange={handleCombobox5Change}>
-          </c-combobox-generic> -->
+          </c-combobox-generic>
           <div class="slds-box" hidden={isCards}>
-            <!-- <c-datatable-search all-data={options6} onfiltered={handleResults}></c-datatable-search> -->
-            <c-card-search all-data={options6} onfiltered={handleResults}></c-card-search>
-        
             
             <div style="margin: 1%">
               <lightning-icon icon-name='standard:client' alternative-text='client' size='x-small' title='client'></lightning-icon>
@@ -239,7 +180,7 @@
             </div>
           
             
-            <template for:each={filteredData} for:item="rec">
+            <template for:each={options6} for:item="rec">
               <div key={rec.id} class="slds-box slds-box_small">
                 
                 <div class="slds-p-horizontal_medium slds-grid slds-gutters">
